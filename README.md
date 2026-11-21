@@ -1,73 +1,83 @@
-# ⚡ install.sh
+# O11 Streamer V4
 
-> 🚀 One-line installation scripts for quick server setup.
+![O11 Streamer preview](preview.jpg)
 
-🌐 [English](#-quick-installation-scripts) | [Tiếng Việt](#-bộ-script-cài-đặt-nhanh) | [中文](#-快速安装脚本) | [Русский](#-скрипты-быстрой-установки) | [한국어](#-빠른-설치-스크립트)
+Tested on **Ubuntu 20.04 → 26.04 (Linux/AMD64)**.
 
----
+> **Recommended:** use **Ubuntu 24.04 LTS** for the best stability — it is the latest long-term-support release and is well tested with `nginx`, `fail2ban`, and `ufw`, which this toolset relies on.
 
-## 🛠️ Quick Installation Scripts
+## Requirements
 
-A collection of battle-tested shell scripts to automate software installation on Ubuntu servers. Save time, reduce errors, and get your environment up and running in seconds.
+- Ubuntu 24.04 LTS (recommended), `root` or `sudo` access
+- A domain/IP directly reachable by the server
+- Open port: `8234` (Web UI/stream)
 
-### 📦 Available Scripts
+## Installation
 
-| Script                                                                       | Description                           | Platform |
-| ---------------------------------------------------------------------------- | ------------------------------------- | -------- |
-| 🎬 [O11 Streamer](https://github.com/leduong/install.sh/tree/o11)            | One-command media streamer setup      | Ubuntu   |
-| 📊 [Node Exporter](https://github.com/leduong/install.sh/tree/node-exporter) | Prometheus Node Exporter installation | Ubuntu   |
+```sh
+sudo apt update && sudo apt upgrade -y
+sudo apt install -y curl wget
+curl -fsSL https://github.com/leduong/install.sh/raw/refs/heads/o11/install.sh | sudo -E bash -
+```
 
----
+The script automatically installs and configures: `nginx` (reverse proxy), `fail2ban`, `ufw`, `redis-server`, `ffmpeg`, and the `o11.service` systemd unit.
 
-## 🛠️ Bộ Script Cài Đặt Nhanh
+## Web UI
 
-Bộ sưu tập các shell script đã được kiểm chứng, giúp tự động hóa việc cài đặt phần mềm trên máy chủ Ubuntu. Tiết kiệm thời gian, giảm lỗi và thiết lập môi trường chỉ trong vài giây.
+```
+http://YOUR_IP:8234
+Username: admin
+Password: 1
+```
 
-### 📦 Danh Sách Script
+> Change the default password immediately after your first login.
 
-| Script                                                                       | Mô tả                            | Nền tảng |
-| ---------------------------------------------------------------------------- | -------------------------------- | -------- |
-| 🎬 [O11 Streamer](https://github.com/leduong/install.sh/tree/o11)            | Cài đặt nhanh trình phát media   | Ubuntu   |
-| 📊 [Node Exporter](https://github.com/leduong/install.sh/tree/node-exporter) | Cài đặt Prometheus Node Exporter | Ubuntu   |
+## IP Whitelist (protect against false fail2ban bans)
 
----
+IPs listed in [ips.txt](ips.txt) are added to fail2ban's `ignoreip` — they will **never be banned**, even after repeated failed requests. All other IPs continue to work normally and remain subject to automatic banning if they violate a jail's rules.
 
-## 🛠️ 快速安装脚本
+1. Edit `ips.txt`, one IP or CIDR per line (lines starting with `#` are ignored):
+   ```
+   203.0.113.10
+   198.51.100.0/24
+   ```
+2. Apply the change:
+   ```sh
+   make whitelist
+   ```
 
-一套经过实战验证的 Shell 脚本集合，用于自动化 Ubuntu 服务器上的软件安装。节省时间、减少错误，几秒钟内即可完成环境搭建。
+## Managing fail2ban (via Makefile)
 
-### 📦 可用脚本
+| Command                               | Description                                  |
+| ------------------------------------- | -------------------------------------------- |
+| `make fail2ban-status`                | Show the status of all jails                 |
+| `make fail2ban-status-jail JAIL=sshd` | Show the status of a specific jail           |
+| `make fail2ban-unban IP=1.2.3.4`      | Unban a single IP                            |
+| `make fail2ban-unban-all`             | Unban all IPs                                |
+| `make whitelist`                      | Refresh the never-ban IP list from `ips.txt` |
 
-| 脚本                                                                         | 说明                              | 平台   |
-| ---------------------------------------------------------------------------- | --------------------------------- | ------ |
-| 🎬 [O11 Streamer](https://github.com/leduong/install.sh/tree/o11)            | 一键部署媒体流服务                | Ubuntu |
-| 📊 [Node Exporter](https://github.com/leduong/install.sh/tree/node-exporter) | Prometheus Node Exporter 安装指南 | Ubuntu |
+## Standalone fail2ban + nginx setup (when o11 is already running)
 
----
+If `o11` is already installed and running on `127.0.0.1:8283` (not via `install.sh`), use [fail2ban.sh](fail2ban.sh) to set up just the `nginx` reverse proxy + `fail2ban`:
 
-## 🛠️ Скрипты Быстрой Установки
+```sh
+curl -fsSL https://github.com/leduong/install.sh/raw/refs/heads/o11/fail2ban.sh | sudo -E bash -
+```
 
-Коллекция проверенных shell-скриптов для автоматизации установки программного обеспечения на серверах Ubuntu. Экономьте время, уменьшайте количество ошибок и настраивайте среду за считанные секунды.
+## Fixing permission issues (if any)
 
-### 📦 Доступные Скрипты
+```sh
+chown -R o11:o11 /home/o11
+chown -R o11:o11 /mnt/hls
+chown -R o11:o11 /mnt/dl
+rm /home/o11/o11.log
+```
 
-| Скрипт                                                                       | Описание                           | Платформа |
-| ---------------------------------------------------------------------------- | ---------------------------------- | --------- |
-| 🎬 [O11 Streamer](https://github.com/leduong/install.sh/tree/o11)            | Быстрая установка медиастримера    | Ubuntu    |
-| 📊 [Node Exporter](https://github.com/leduong/install.sh/tree/node-exporter) | Установка Prometheus Node Exporter | Ubuntu    |
+## System cleanup
 
----
-
-## 🛠️ 빠른 설치 스크립트
-
-Ubuntu 서버에서 소프트웨어 설치를 자동화하는 검증된 셸 스크립트 모음입니다. 시간을 절약하고 오류를 줄이며 몇 초 만에 환경을 구축하세요.
-
-### 📦 사용 가능한 스크립트
-
-| 스크립트                                                                     | 설명                                 | 플랫폼 |
-| ---------------------------------------------------------------------------- | ------------------------------------ | ------ |
-| 🎬 [O11 Streamer](https://github.com/leduong/install.sh/tree/o11)            | 원클릭 미디어 스트리머 설치          | Ubuntu |
-| 📊 [Node Exporter](https://github.com/leduong/install.sh/tree/node-exporter) | Prometheus Node Exporter 설치 가이드 | Ubuntu |
+```sh
+make clean-system
+```
 
 ---
 

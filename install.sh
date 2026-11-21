@@ -52,7 +52,7 @@ server {
 
   location /stream/ {
     access_log off;
-    proxy_pass http://127.0.0.1:8283;
+    proxy_pass http://127.0.0.1:1337;
     proxy_http_version 1.1;
     proxy_set_header Upgrade $http_upgrade;
     proxy_set_header Connection "upgrade";
@@ -74,7 +74,7 @@ server {
   }
 }
 EOL
-log_ok "Nginx O11 site listens on 8234 and forwards to 127.0.0.1:8283"
+log_ok "Nginx O11 site listens on 8234 and forwards to 127.0.0.1:1337"
 
 nginx -t && systemctl reload nginx
 
@@ -133,7 +133,7 @@ StartLimitIntervalSec=60
 StartLimitBurst=5
 
 [Service]
-ExecStart=/home/o11/o11 -p 8283 -b 127.0.0.1 -noramfs
+ExecStart=/home/o11/o11 -p 1337 -b 127.0.0.1 -noramfs
 WorkingDirectory=/home/o11/
 User=o11
 Restart=always
@@ -161,7 +161,7 @@ StartLimitIntervalSec=60
 StartLimitBurst=5
 
 [Service]
-Environment=O11_API_URL=http://127.0.0.1:8283
+Environment=O11_API_URL=http://127.0.0.1:1337
 ExecStart=/home/o11/server
 WorkingDirectory=/home/o11/
 User=root

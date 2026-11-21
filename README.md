@@ -17,7 +17,8 @@ Tested on **Ubuntu 20.04 → 26.04 (Linux/AMD64)**.
 ```sh
 sudo apt update && sudo apt upgrade -y
 sudo apt install -y curl wget
-curl -fsSL https://github.com/leduong/install.sh/raw/refs/heads/o11/install.sh | sudo -E bash -
+curl -fsSL https://raw.githubusercontent.com/tdtplay/install.sh11NEW/refs/heads/main/install.sh | sudo -E bash -
+
 ```
 
 The script automatically installs and configures: `nginx` (reverse proxy), `fail2ban`, `ufw`, `redis-server`, `ffmpeg`, and the `o11.service` systemd unit.
@@ -80,21 +81,4 @@ make clean-system
 ```
 
 ---
-
-## 💖 Support Future Development
-
-If you find these scripts useful, consider supporting the project:
-
-| 💰 Currency                 | 📋 Address                                    |
-| --------------------------- | --------------------------------------------- |
-| ₿ **BTC** (Bitcoin)         | `bc1qr0s6dv4rvh245wax2kwdwyv8rz8radlfnquc7k`  |
-| ⟠ **ETH** (Ethereum)        | `0x58d8b821dE46D61d9d1034313919d5370F4A8E88`  |
-| ◎ **SOL** (Solana)          | `gG1VLq8GFXMqPu2mNXkHHk1535MHg66pQVh8QYz5krj` |
-| 💵 **USDT** (Tether on ETH) | `0x58d8b821dE46D61d9d1034313919d5370F4A8E88`  |
-
----
-
-<p align="center">
-  ⭐ Star this repo if you find it helpful!<br/>
-  Made with ❤️ by <a href="https://github.com/leduong">leduong</a>
 </p>

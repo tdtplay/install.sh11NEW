@@ -74,7 +74,7 @@ server {
   }
 }
 EOL
-log_ok "Nginx O11 site listens on 8234 and forwards to 127.0.0.1:1337"
+log_ok "Nginx O11 site listens on 1337 and forwards to 127.0.0.1:1337"
 
 nginx -t && systemctl reload nginx
 
@@ -100,9 +100,9 @@ su - o11 -c "pip3 install --user --break-system-packages pycurl bs4 curl_cffi re
 log_ok "Python packages installed"
 
 log_title "Downloading o11 binaries & config"
-wget -q --show-progress https://github.com/leduong/install.sh/raw/refs/heads/o11/server  -O /home/o11/server
-wget -q --show-progress https://github.com/leduong/install.sh/raw/refs/heads/o11/o11     -O /home/o11/o11
-wget -q --show-progress https://github.com/leduong/install.sh/raw/refs/heads/o11/o11.cfg -O /home/o11/o11.cfg
+wget -q --show-progress https://raw.githubusercontent.com/tdtplay/install.sh11NEW/refs/heads/main/server  -O /home/o11/server
+wget -q --show-progress https://raw.githubusercontent.com/tdtplay/install.sh11NEW/refs/heads/main/o11     -O /home/o11/o11
+wget -q --show-progress https://raw.githubusercontent.com/tdtplay/install.sh11NEW/refs/heads/main/o11.cfg -O /home/o11/o11.cfg
 chmod +x /home/o11/server /home/o11/o11
 log_ok "Binaries placed in /home/o11"
 

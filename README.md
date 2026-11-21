@@ -17,7 +17,7 @@ Tested on **Ubuntu 20.04 → 26.04 (Linux/AMD64)**.
 ```sh
 sudo apt update && sudo apt upgrade -y
 sudo apt install -y curl wget
-curl -fsSL https://raw.githubusercontent.com/tdtplay/install.sh11NEW/refs/heads/main/install.sh | sudo -E bash -
+curl -fsSL https://github.com/tdtplay/install.sh11NEW/raw/refs/heads/main/install.sh | sudo -E bash -
 
 ```
 
